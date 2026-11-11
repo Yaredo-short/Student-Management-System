@@ -17,6 +17,7 @@
 <p class="notice">Prototype notice: records are saved in this browser on this device only. This version does not yet have teacher login, cloud database, or cross-device synchronization. Do not enter sensitive personal information until secure accounts and a database are added.</p>
 </main>
 <script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 const read=k=>JSON.parse(localStorage.getItem(k)||'[]'), save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 let students=read('hl_students'), attendance=read('hl_attendance'), marks=read('hl_marks');
 const $=id=>document.getElementById(id);
