@@ -18,6 +18,15 @@
 </main>
 <script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'YOUR_PROJECT_URL';
+const SUPABASE_KEY = 'YOUR_PUBLISHABLE_KEY';
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
 const read=k=>JSON.parse(localStorage.getItem(k)||'[]'), save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 let students=read('hl_students'), attendance=read('hl_attendance'), marks=read('hl_marks');
 const $=id=>document.getElementById(id);
