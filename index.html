@@ -16,7 +16,6 @@
 <section id="marks" class="panel"><h2>Grade 11 · Web Design and Development</h2><p>First-semester weighting: Module 1 = 55%, Module 2 = 34%, Module 3 = 11%.</p><form id="marksForm"><div><label>Student</label><select id="marksStudent"></select></div><div><label>Module 1 mark /100</label><input id="m1" type="number" min="0" max="100" step="0.01" required></div><div><label>Module 2 mark /100</label><input id="m2" type="number" min="0" max="100" step="0.01" required></div><div><label>Module 3 mark /100</label><input id="m3" type="number" min="0" max="100" step="0.01" required></div><div style="align-self:end"><button>Calculate and save</button></div></form><p id="result" aria-live="polite"></p><p class="hint">The subject has 7 modules in total. Modules 4–7 and second-semester weighting can be configured later; no weighting has been assumed for them.</p><div style="overflow-x:auto"><table><thead><tr><th>Student</th><th>M1</th><th>M2</th><th>M3</th><th>Weighted total /100</th></tr></thead><tbody id="marksRows"></tbody></table></div></section>
 <p class="notice">Prototype notice: records are saved in this browser on this device only. This version does not yet have teacher login, cloud database, or cross-device synchronization. Do not enter sensitive personal information until secure accounts and a database are added.</p>
 </main>
-<script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = 'https://suucbnkxuivlqfnwpclr.supabase.co';
