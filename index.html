@@ -21,9 +21,9 @@
 const SUPABASE_URL = 'https://suucbnkxuivlqfnwpclr.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_TvJLZRMEDYxXEJc4NMihOw_LbXbuUAh';
 
-const supabaseClient = window.supabase.createClient(
+const supabaseClient = window.supabase.createClient(SUPABASE_URL,
   'https://suucbnkxuivlqfnwpclr.supabase.co/.';
-  'sb_publishable_TvJLZRMEDYxXEJc4NMihOw_LbXbuUAh');
+  SUPABASE_KEY'sb_publishable_TvJLZRMEDYxXEJc4NMihOw_LbXbuUAh');
 
 const read=k=>JSON.parse(localStorage.getItem(k)||'[]'), save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 let students=read('hl_students'), attendance=read('hl_attendance'), marks=read('hl_marks');
