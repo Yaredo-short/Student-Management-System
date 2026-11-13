@@ -17,15 +17,15 @@
 <p class="notice">Prototype notice: records are saved in this browser on this device only. This version does not yet have teacher login, cloud database, or cross-device synchronization. Do not enter sensitive personal information until secure accounts and a database are added.</p>
 </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL = 'https://suucbnkxuivlqfnwpclr.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_TvJLZRMEDYxXEJc4NMihOw_LbXbuUAh';
+<script>const SUPABASE_URL = 'https://suucbnkxuivlqfnwpclr.supabase.co';
+const SUPABASE_KEY = 'YOUR_EXISTING_PUBLISHABLE_KEY';
 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL,
-  'https://suucbnkxuivlqfnwpclr.supabase.co/.';
-  SUPABASE_KEY'sb_publishable_TvJLZRMEDYxXEJc4NMihOw_LbXbuUAh');
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
-const read=k=>JSON.parse(localStorage.getItem(k)||'[]'), save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const read=k=>JSON.parse(localStorage.getItem(k)||'[]'), save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));;
 let students=read('hl_students'), attendance=read('hl_attendance'), marks=read('hl_marks');
 const $=id=>document.getElementById(id);
 function render(){ $('total').textContent=students.length;$('attTotal').textContent=attendance.length;
