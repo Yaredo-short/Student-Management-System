@@ -55,4 +55,75 @@ $('attendanceDate').value=new Date().toISOString().slice(0,10);
 $('attendanceForm').addEventListener('submit',e=>{e.preventDefault();const s=students.find(x=>x.id===$('attendanceStudent').value);if(!s)return alert('Register a student first.');attendance.push({date:$('attendanceDate').value,name:s.name,status:$('status').value});save('hl_attendance',attendance);render();});
 $('marksForm').addEventListener('submit',e=>{e.preventDefault();const s=students.find(x=>x.id===$('marksStudent').value);if(!s)return alert('Register a student first.');const a=+$('m1').value,b=+$('m2').value,c=+$('m3').value;if([a,b,c].some(x=>x<0||x>100))return alert('Marks must be between 0 and 100.');const total=a*.55+b*.34+c*.11;marks=marks.filter(x=>x.id!==s.id);marks.push({id:s.id,name:s.name,m1:a,m2:b,m3:c,total});save('hl_marks',marks);$('result').textContent='Weighted first-semester result: '+total.toFixed(2)+' / 100';render();});
 render();
+const adminForm = document.getElementById('adminLoginForm');
+const loginMessage = document.getElementById('loginMessage');
+const loginButton = document.getElementById('loginButton');
+
+async function verifyAdmin(session) {
+  if (!session) return false;
+
+  const { data: profile, error } = await supabaseClient
+    .from('profiles')
+    .select('role')
+    .eq('id', session.user.id)
+    .single();
+
+  if (error || !profile || profile.role !== 'admin') {
+    await supabaseClient.auth.signOut();
+    loginMessage.textContent = 'Access denied. Admin account required.';
+    return false;
+  }
+
+  document.getElementById('adminLogin').style.display = 'none';
+
+  let logoutButton = document.getElementById('adminLogout');
+  if (!logoutButton) {
+    logoutButton = document.createElement('button');
+    logoutButton.id = 'adminLogout';
+    logoutButton.textContent = 'Log out';
+    document.querySelector('header .wrap').appendChild(logoutButton);
+
+    logoutButton.addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      document.getElementById('adminLogin').style.display = 'flex';
+      logoutButton.remove();
+    });
+  }
+
+  return true;
+}
+
+adminForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  loginButton.disabled = true;
+  loginButton.textContent = 'Signing in...';
+  loginMessage.textContent = '';
+
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: document.getElementById('adminEmail').value.trim(),
+      password: document.getElementById('adminPassword').value
+    });
+
+    if (error) throw error;
+
+    const allowed = await verifyAdmin(data.session);
+    if (!allowed) {
+      loginMessage.textContent = 'This account is not an administrator.';
+    }
+  } catch (error) {
+    loginMessage.textContent = 'Login failed. Check your email and password.';
+  } finally {
+    loginButton.disabled = false;
+    loginButton.textContent = 'Login';
+  }
+});
+
+(async () => {
+  const { data, error } = await supabaseClient.auth.getSession();
+  if (!error && data.session) {
+    await verifyAdmin(data.session);
+  }
+})();
+
 </script></body></html>
