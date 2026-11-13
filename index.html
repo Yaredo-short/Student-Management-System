@@ -1,129 +1,423 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Hidase Lideta | Student Management</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hidase Lideta | Student Management System</title>
 <style>
-:root{font-family:Arial,sans-serif;color:#172033;background:#f4f7fb}*{box-sizing:border-box}body{margin:0}header{background:#12356b;color:white;padding:22px 18px}header h1{margin:0 0 6px;font-size:22px}header p{margin:0;color:#dce8ff}.wrap{max-width:1050px;margin:auto;padding:18px}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.card,section{background:white;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:14px}.stat strong{display:block;font-size:27px;color:#12356b}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.tabs button,button{border:0;border-radius:8px;background:#174b91;color:white;padding:10px 14px;cursor:pointer}.tabs button.active{background:#0d2447}input,select{padding:10px;border:1px solid #cbd5e1;border-radius:7px;width:100%;margin:5px 0 12px}label{font-size:14px;font-weight:bold}form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{text-align:left;border-bottom:1px solid #e5eaf1;padding:9px;font-size:14px}th{background:#f1f5f9}.panel{display:none}.panel.show{display:block}.hint{color:#64748b;font-size:13px}.danger{background:#b42318}.notice{background:#fff7df;padding:12px;border-radius:8px;font-size:13px}@media(max-width:600px){.wrap{padding:12px}header h1{font-size:19px}table{display:block;overflow-x:auto}}
-</style></head>
+:root{font-family:Arial,sans-serif;color:#172033;background:#f4f7fb}
+*{box-sizing:border-box}
+body{margin:0}
+header{background:#12356b;color:white;padding:20px 18px}
+header .head{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+header h1{margin:0 0 6px;font-size:22px}
+header p{margin:0;color:#dce8ff}
+.wrap{max-width:1100px;margin:auto;padding:18px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.card,section{background:white;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:14px}
+.stat strong{display:block;font-size:27px;color:#12356b;margin-top:6px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.tabs button,button{border:0;border-radius:8px;background:#174b91;color:white;padding:10px 14px;cursor:pointer}
+button:disabled{opacity:.6;cursor:not-allowed}
+.tabs button.active{background:#0d2447}
+input,select{padding:10px;border:1px solid #cbd5e1;border-radius:7px;width:100%;margin:5px 0 12px}
+label{font-size:14px;font-weight:bold}
+form.data-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.panel{display:none}
+.panel.show{display:block}
+.hint{color:#64748b;font-size:13px}
+.danger{background:#b42318}
+.notice{background:#fff7df;padding:12px;border-radius:8px;font-size:13px;line-height:1.5}
+.role-pill{display:inline-block;background:#e7f0ff;color:#12356b;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
+.login-overlay{position:fixed;inset:0;z-index:9999;background:#f4f7fb;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{background:white;padding:25px;border-radius:12px;width:100%;max-width:420px;box-shadow:0 10px 35px #0d244722}
+.login-card h2{margin-top:0}
+.login-card button{width:100%}
+#loginMessage{min-height:20px;color:#b42318;font-size:14px}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.toolbar button{white-space:nowrap}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+th,td{text-align:left;border-bottom:1px solid #e5eaf1;padding:9px;font-size:14px}
+th{background:#f1f5f9}
+.empty{color:#64748b;text-align:center;padding:18px}
+.hidden{display:none!important}
+@media(max-width:600px){
+ .wrap{padding:12px}
+ header h1{font-size:19px}
+ table{display:block;overflow-x:auto;white-space:nowrap}
+ .login-card{padding:20px}
+}
+</style>
+</head>
 <body>
-<header><div class="wrap"><h1>Hidase Lideta Secondary School</h1><p>Student Management System · Academic Year 2019 E.C. / 2026</p></div></header>
-<main class="wrap"><div id="adminLogin" style="position:fixed;inset:0;z-index:9999;background:#f4f7fb;display:flex;align-items:center;justify-content:center;padding:20px">
-  <div style="background:white;padding:25px;border-radius:12px;width:100%;max-width:400px">
-    <h2>Hidase Lideta Admin Login</h2>
-    <form id="adminLoginForm" style="display:block">
-      <label>Email address</label>
-      <input id="adminEmail" type="email" required>
-      <label>Password</label>
-      <input id="adminPassword" type="password" required>
-      <button type="submit" id="loginButton">Login</button>
-      <p id="loginMessage"></p>
+
+<header>
+  <div class="head">
+    <div>
+      <h1>Hidase Lideta Secondary School</h1>
+      <p id="welcomeText">Student Management System · Academic Year 2019 E.C. / 2026</p>
+    </div>
+    <div class="toolbar">
+      <span id="rolePill" class="role-pill hidden"></span>
+      <button id="logoutButton" class="hidden" type="button">Log out</button>
+    </div>
+  </div>
+</header>
+
+<div id="loginOverlay" class="login-overlay">
+  <div class="login-card">
+    <h2>Hidase Lideta Staff Login</h2>
+    <p class="hint">Sign in with your school administrator or teacher account.</p>
+    <form id="loginForm">
+      <label for="loginEmail">Email address</label>
+      <input id="loginEmail" type="email" autocomplete="username" required>
+      <label for="loginPassword">Password</label>
+      <input id="loginPassword" type="password" autocomplete="current-password" required>
+      <button id="loginButton" type="submit">Login</button>
+      <p id="loginMessage" aria-live="polite"></p>
     </form>
   </div>
 </div>
-<div class="stats"><div class="card stat">Registered students<strong id="total">0</strong></div><div class="card stat">Attendance records<strong id="attTotal">0</strong></div><div class="card stat">Grade levels<strong>6–12</strong></div></div>
-<nav class="tabs"><button class="active" data-tab="students">Students</button><button data-tab="attendance">Attendance</button><button data-tab="marks">Marks</button></nav>
-<section id="students" class="panel show"><h2>Student registration</h2><form id="studentForm"><div><label>Student full name</label><input id="studentName" required></div><div><label>Grade</label><select id="grade"><option>Grade 6</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option><option selected>Grade 11</option><option>Grade 12</option></select></div><div><label>Section</label><select id="section"><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></div><div><label>Student ID</label><input id="studentId" required></div><div style="align-self:end"><button type="submit">Add student</button></div></form><input id="search" placeholder="Search by name or student ID"><div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>Name</th><th>Grade</th><th>Section</th><th>Action</th></tr></thead><tbody id="studentRows"></tbody></table></div></section>
-<section id="attendance" class="panel"><h2>Daily attendance</h2><p class="hint">Choose a student and mark: Present, Absent, Late, or Excused.</p><form id="attendanceForm"><div><label>Student</label><select id="attendanceStudent"></select></div><div><label>Date</label><input id="attendanceDate" type="date" required></div><div><label>Status</label><select id="status"><option>Present</option><option>Absent</option><option>Late</option><option>Excused</option></select></div><div style="align-self:end"><button>Save attendance</button></div></form><div style="overflow-x:auto"><table><thead><tr><th>Date</th><th>Student</th><th>Status</th></tr></thead><tbody id="attendanceRows"></tbody></table></div></section>
-<section id="marks" class="panel"><h2>Grade 11 · Web Design and Development</h2><p>First-semester weighting: Module 1 = 55%, Module 2 = 34%, Module 3 = 11%.</p><form id="marksForm"><div><label>Student</label><select id="marksStudent"></select></div><div><label>Module 1 mark /100</label><input id="m1" type="number" min="0" max="100" step="0.01" required></div><div><label>Module 2 mark /100</label><input id="m2" type="number" min="0" max="100" step="0.01" required></div><div><label>Module 3 mark /100</label><input id="m3" type="number" min="0" max="100" step="0.01" required></div><div style="align-self:end"><button>Calculate and save</button></div></form><p id="result" aria-live="polite"></p><p class="hint">The subject has 7 modules in total. Modules 4–7 and second-semester weighting can be configured later; no weighting has been assumed for them.</p><div style="overflow-x:auto"><table><thead><tr><th>Student</th><th>M1</th><th>M2</th><th>M3</th><th>Weighted total /100</th></tr></thead><tbody id="marksRows"></tbody></table></div></section>
-<p class="notice">Prototype notice: records are saved in this browser on this device only. This version does not yet have teacher login, cloud database, or cross-device synchronization. Do not enter sensitive personal information until secure accounts and a database are added.</p>
+
+<main id="appMain" class="wrap hidden">
+  <div class="notice">
+    <strong>Prototype data notice:</strong> Student, attendance, and mark records in this version are stored in this browser using local storage. They are not saved to Supabase and are not synchronized across devices. This interface hides some controls by role, but that is not a security boundary. Do not enter real or sensitive student information until database storage, class assignments, and Supabase Row Level Security (RLS) policies are fully implemented and tested.
+  </div>
+
+  <div class="stats">
+    <div class="card stat">Registered students<strong id="totalStudents">0</strong></div>
+    <div class="card stat">Attendance records<strong id="totalAttendance">0</strong></div>
+    <div class="card stat">Grade levels<strong>6–12</strong></div>
+  </div>
+
+  <nav class="tabs" aria-label="Dashboard sections">
+    <button class="active" data-tab="students" type="button">Students</button>
+    <button data-tab="attendance" type="button">Attendance</button>
+    <button data-tab="marks" type="button">Marks</button>
+  </nav>
+
+  <section id="students" class="panel show">
+    <h2>Students</h2>
+    <div id="adminStudentTools">
+      <h3>Student registration <span class="role-pill">Admin only</span></h3>
+      <form id="studentForm" class="data-form">
+        <div><label for="studentName">Student full name</label><input id="studentName" required></div>
+        <div><label for="grade">Grade</label>
+          <select id="grade">
+            <option>Grade 6</option><option>Grade 7</option><option>Grade 8</option>
+            <option>Grade 9</option><option>Grade 10</option><option selected>Grade 11</option><option>Grade 12</option>
+          </select>
+        </div>
+        <div><label for="section">Section</label>
+          <select id="section"><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+        </div>
+        <div><label for="studentId">Student ID</label><input id="studentId" required></div>
+        <div style="align-self:end"><button type="submit">Add student</button></div>
+      </form>
+    </div>
+    <label for="studentSearch">Search students</label>
+    <input id="studentSearch" placeholder="Search by name, student ID, grade or section">
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Student ID</th><th>Name</th><th>Grade</th><th>Section</th><th id="studentActionHeading">Action</th></tr></thead>
+        <tbody id="studentRows"></tbody>
+      </table>
+    </div>
+    <p id="studentCountHint" class="hint"></p>
+  </section>
+
+  <section id="attendance" class="panel">
+    <h2>Daily attendance</h2>
+    <p class="hint">Choose a student and mark Present, Absent, Late, or Excused.</p>
+    <form id="attendanceForm" class="data-form">
+      <div><label for="attendanceStudent">Student</label><select id="attendanceStudent" required></select></div>
+      <div><label for="attendanceDate">Date</label><input id="attendanceDate" type="date" required></div>
+      <div><label for="attendanceStatus">Status</label>
+        <select id="attendanceStatus"><option>Present</option><option>Absent</option><option>Late</option><option>Excused</option></select>
+      </div>
+      <div style="align-self:end"><button type="submit">Save attendance</button></div>
+    </form>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Date</th><th>Student</th><th>Status</th></tr></thead><tbody id="attendanceRows"></tbody></table>
+    </div>
+  </section>
+
+  <section id="marks" class="panel">
+    <h2>Grade 11 · Web Design and Development</h2>
+    <p>First-semester weighting: Module 1 = 55%, Module 2 = 34%, Module 3 = 11%.</p>
+    <form id="marksForm" class="data-form">
+      <div><label for="marksStudent">Student</label><select id="marksStudent" required></select></div>
+      <div><label for="module1">Module 1 mark /100</label><input id="module1" type="number" min="0" max="100" step="0.01" required></div>
+      <div><label for="module2">Module 2 mark /100</label><input id="module2" type="number" min="0" max="100" step="0.01" required></div>
+      <div><label for="module3">Module 3 mark /100</label><input id="module3" type="number" min="0" max="100" step="0.01" required></div>
+      <div style="align-self:end"><button type="submit">Calculate and save</button></div>
+    </form>
+    <p id="marksResult" aria-live="polite"></p>
+    <p class="hint">Modules 4–7 and second-semester weighting are not configured in this prototype.</p>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Student</th><th>M1</th><th>M2</th><th>M3</th><th>Weighted total /100</th></tr></thead><tbody id="marksRows"></tbody></table>
+    </div>
+  </section>
 </main>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>const SUPABASE_URL = 'https://suucbnkxuivlqfnwpclr.supabase.co';
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+'use strict';
+
+// This is a Supabase publishable key. Never put a Supabase service_role/secret key in browser code.
+const SUPABASE_URL = 'https://suucbnkxuivlqfnwpclr.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_TvJLZRMEDYxXEJc4NMihOw_LbXbuUAh';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const $ = (id) => document.getElementById(id);
+const read = (key) => {
+  try { return JSON.parse(localStorage.getItem(key) || '[]'); }
+  catch { return []; }
+};
+const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
 
-const read=k=>JSON.parse(localStorage.getItem(k)||'[]'), save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));;
-let students=read('hl_students'), attendance=read('hl_attendance'), marks=read('hl_marks');
-const $=id=>document.getElementById(id);
-function render(){ $('total').textContent=students.length;$('attTotal').textContent=attendance.length;
-$('studentRows').innerHTML=students.map((s,i)=>'<tr><td>'+esc(s.id)+'</td><td>'+esc(s.name)+'</td><td>'+esc(s.grade)+'</td><td>'+esc(s.section)+'</td><td><button class="danger" onclick="removeStudent('+i+')">Remove</button></td></tr>').join('');
-const opts=students.map(s=>'<option value="'+esc(s.id)+'">'+esc(s.name)+' · '+esc(s.id)+'</option>').join('');$('attendanceStudent').innerHTML=opts;$('marksStudent').innerHTML=opts;
-$('attendanceRows').innerHTML=attendance.slice().reverse().map(a=>'<tr><td>'+esc(a.date)+'</td><td>'+esc(a.name)+'</td><td>'+esc(a.status)+'</td></tr>').join('');
-$('marksRows').innerHTML=marks.map(m=>'<tr><td>'+esc(m.name)+'</td><td>'+m.m1+'</td><td>'+m.m2+'</td><td>'+m.m3+'</td><td><b>'+m.total.toFixed(2)+'</b></td></tr>').join('');
+let students = read('hl_students');
+let attendance = read('hl_attendance');
+let marks = read('hl_marks');
+let currentRole = null;
+let currentProfile = null;
+let authCheckInProgress = false;
+
+function esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  })[char]);
 }
-function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-window.removeStudent=i=>{if(confirm('Remove this student?')){students.splice(i,1);save('hl_students',students);render();}};
-document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('show',x.id===b.dataset.tab));}));
-$('studentForm').addEventListener('submit',e=>{e.preventDefault();if(students.some(s=>s.id===$('studentId').value.trim()))return alert('That student ID already exists.');students.push({id:$('studentId').value.trim(),name:$('studentName').value.trim(),grade:$('grade').value,section:$('section').value});save('hl_students',students);e.target.reset();render();});
-$('search').addEventListener('input',()=>{const q=$('search').value.toLowerCase();document.querySelectorAll('#studentRows tr').forEach(r=>r.hidden=!r.textContent.toLowerCase().includes(q));});
-$('attendanceDate').value=new Date().toISOString().slice(0,10);
-$('attendanceForm').addEventListener('submit',e=>{e.preventDefault();const s=students.find(x=>x.id===$('attendanceStudent').value);if(!s)return alert('Register a student first.');attendance.push({date:$('attendanceDate').value,name:s.name,status:$('status').value});save('hl_attendance',attendance);render();});
-$('marksForm').addEventListener('submit',e=>{e.preventDefault();const s=students.find(x=>x.id===$('marksStudent').value);if(!s)return alert('Register a student first.');const a=+$('m1').value,b=+$('m2').value,c=+$('m3').value;if([a,b,c].some(x=>x<0||x>100))return alert('Marks must be between 0 and 100.');const total=a*.55+b*.34+c*.11;marks=marks.filter(x=>x.id!==s.id);marks.push({id:s.id,name:s.name,m1:a,m2:b,m3:c,total});save('hl_marks',marks);$('result').textContent='Weighted first-semester result: '+total.toFixed(2)+' / 100';render();});
-render();
-const adminForm = document.getElementById('adminLoginForm');
-const loginMessage = document.getElementById('loginMessage');
-const loginButton = document.getElementById('loginButton');
 
-async function verifyAdmin(session) {
-  if (!session) return false;
+function showLogin(message = '') {
+  currentRole = null;
+  currentProfile = null;
+  $('loginOverlay').classList.remove('hidden');
+  $('appMain').classList.add('hidden');
+  $('rolePill').classList.add('hidden');
+  $('logoutButton').classList.add('hidden');
+  $('welcomeText').textContent = 'Student Management System · Academic Year 2019 E.C. / 2026';
+  $('loginMessage').textContent = message;
+}
 
-  const { data: profile, error } = await supabaseClient
-    .from('profiles')
-    .select('role')
-    .eq('id', session.user.id)
-    .single();
+function showDashboard(profile) {
+  currentRole = profile.role;
+  currentProfile = profile;
+  $('loginOverlay').classList.add('hidden');
+  $('appMain').classList.remove('hidden');
+  $('rolePill').textContent = profile.role.toUpperCase();
+  $('rolePill').classList.remove('hidden');
+  $('logoutButton').classList.remove('hidden');
+  $('welcomeText').textContent = 'Welcome, ' + (profile.full_name || 'Staff member');
+  const isAdmin = currentRole === 'admin';
+  $('adminStudentTools').classList.toggle('hidden', !isAdmin);
+  $('studentActionHeading').textContent = isAdmin ? 'Action' : 'View only';
+  render();
+}
 
-  if (error || !profile || profile.role !== 'admin') {
-    await supabaseClient.auth.signOut();
-    loginMessage.textContent = 'Access denied. Admin account required.';
+async function loadProfile(session) {
+  if (!session?.user?.id) {
+    showLogin();
     return false;
   }
 
-  document.getElementById('adminLogin').style.display = 'none';
+  const { data: profile, error } = await supabaseClient
+    .from('profiles')
+    .select('id, role, full_name')
+    .eq('id', session.user.id)
+    .maybeSingle();
 
-  let logoutButton = document.getElementById('adminLogout');
-  if (!logoutButton) {
-    logoutButton = document.createElement('button');
-    logoutButton.id = 'adminLogout';
-    logoutButton.textContent = 'Log out';
-    document.querySelector('header .wrap').appendChild(logoutButton);
-
-    logoutButton.addEventListener('click', async () => {
-      await supabaseClient.auth.signOut();
-      document.getElementById('adminLogin').style.display = 'flex';
-      logoutButton.remove();
-    });
+  if (error) {
+    console.error('Profile lookup failed:', error.message);
+    await supabaseClient.auth.signOut();
+    showLogin('Could not verify your staff profile. Contact the administrator.');
+    return false;
   }
 
+  if (!profile || !['admin', 'teacher'].includes(profile.role)) {
+    await supabaseClient.auth.signOut();
+    showLogin('Access denied. Only registered school administrators and teachers can sign in.');
+    return false;
+  }
+
+  showDashboard(profile);
   return true;
 }
 
-adminForm.addEventListener('submit', async (event) => {
+function render() {
+  $('totalStudents').textContent = students.length;
+  $('totalAttendance').textContent = attendance.length;
+
+  const query = $('studentSearch').value.trim().toLowerCase();
+  const visibleStudents = students.filter((student) =>
+    [student.id, student.name, student.grade, student.section]
+      .some((value) => String(value).toLowerCase().includes(query))
+  );
+
+  $('studentRows').innerHTML = visibleStudents.length
+    ? visibleStudents.map((student) => {
+        const action = currentRole === 'admin'
+          ? '<button class="danger" type="button" data-remove-student="' + esc(student.id) + '">Remove</button>'
+          : '<span class="hint">No access</span>';
+        return '<tr><td>' + esc(student.id) + '</td><td>' + esc(student.name) +
+          '</td><td>' + esc(student.grade) + '</td><td>' + esc(student.section) +
+          '</td><td>' + action + '</td></tr>';
+      }).join('')
+    : '<tr><td colspan="5" class="empty">No students found.</td></tr>';
+
+  const options = students.map((student) =>
+    '<option value="' + esc(student.id) + '">' + esc(student.name) + ' · ' +
+    esc(student.id) + '</option>'
+  ).join('');
+  $('attendanceStudent').innerHTML = options;
+  $('marksStudent').innerHTML = options;
+
+  $('attendanceRows').innerHTML = attendance.length
+    ? attendance.slice().reverse().map((record) =>
+        '<tr><td>' + esc(record.date) + '</td><td>' + esc(record.name) +
+        '</td><td>' + esc(record.status) + '</td></tr>'
+      ).join('')
+    : '<tr><td colspan="3" class="empty">No attendance records yet.</td></tr>';
+
+  $('marksRows').innerHTML = marks.length
+    ? marks.map((record) =>
+        '<tr><td>' + esc(record.name) + '</td><td>' + Number(record.m1).toFixed(2) +
+        '</td><td>' + Number(record.m2).toFixed(2) + '</td><td>' +
+        Number(record.m3).toFixed(2) + '</td><td><b>' +
+        Number(record.total).toFixed(2) + '</b></td></tr>'
+      ).join('')
+    : '<tr><td colspan="5" class="empty">No marks recorded yet.</td></tr>';
+}
+
+document.querySelectorAll('[data-tab]').forEach((button) => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('[data-tab]').forEach((item) =>
+      item.classList.toggle('active', item === button)
+    );
+    document.querySelectorAll('.panel').forEach((panel) =>
+      panel.classList.toggle('show', panel.id === button.dataset.tab)
+    );
+  });
+});
+
+$('studentForm').addEventListener('submit', (event) => {
   event.preventDefault();
-  loginButton.disabled = true;
-  loginButton.textContent = 'Signing in...';
-  loginMessage.textContent = '';
+  if (currentRole !== 'admin') return alert('Only administrators can register students.');
+  const id = $('studentId').value.trim();
+  if (students.some((student) => student.id === id)) return alert('That student ID already exists.');
+  students.push({
+    id,
+    name: $('studentName').value.trim(),
+    grade: $('grade').value,
+    section: $('section').value
+  });
+  save('hl_students', students);
+  event.target.reset();
+  render();
+});
+
+$('studentRows').addEventListener('click', (event) => {
+  const button = event.target.closest('[data-remove-student]');
+  if (!button) return;
+  if (currentRole !== 'admin') return alert('Only administrators can remove students.');
+  const id = button.dataset.removeStudent;
+  if (!confirm('Remove this student?')) return;
+  students = students.filter((student) => student.id !== id);
+  save('hl_students', students);
+  render();
+});
+
+$('studentSearch').addEventListener('input', render);
+
+$('attendanceDate').value = new Date().toISOString().slice(0, 10);
+$('attendanceForm').addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (!['admin', 'teacher'].includes(currentRole)) return alert('Please sign in first.');
+  const student = students.find((item) => item.id === $('attendanceStudent').value);
+  if (!student) return alert('Register a student first.');
+  attendance.push({
+    date: $('attendanceDate').value,
+    studentId: student.id,
+    name: student.name,
+    status: $('attendanceStatus').value
+  });
+  save('hl_attendance', attendance);
+  render();
+  alert('Attendance saved in this browser.');
+});
+
+$('marksForm').addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (!['admin', 'teacher'].includes(currentRole)) return alert('Please sign in first.');
+  const student = students.find((item) => item.id === $('marksStudent').value);
+  if (!student) return alert('Register a student first.');
+  const m1 = Number($('module1').value);
+  const m2 = Number($('module2').value);
+  const m3 = Number($('module3').value);
+  if ([m1, m2, m3].some((value) => !Number.isFinite(value) || value < 0 || value > 100)) {
+    return alert('Marks must be between 0 and 100.');
+  }
+  const total = m1 * 0.55 + m2 * 0.34 + m3 * 0.11;
+  marks = marks.filter((record) => record.id !== student.id);
+  marks.push({ id: student.id, name: student.name, m1, m2, m3, total });
+  save('hl_marks', marks);
+  $('marksResult').textContent = 'Weighted first-semester result: ' + total.toFixed(2) + ' / 100';
+  render();
+});
+
+$('loginForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  $('loginButton').disabled = true;
+  $('loginButton').textContent = 'Signing in...';
+  $('loginMessage').textContent = '';
 
   try {
     const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email: document.getElementById('adminEmail').value.trim(),
-      password: document.getElementById('adminPassword').value
+      email: $('loginEmail').value.trim(),
+      password: $('loginPassword').value
     });
-
     if (error) throw error;
-
-    const allowed = await verifyAdmin(data.session);
-    if (!allowed) {
-      loginMessage.textContent = 'This account is not an administrator.';
-    }
+    await loadProfile(data.session);
   } catch (error) {
-    loginMessage.textContent = 'Login failed. Check your email and password.';
+    console.error('Login failed:', error.message);
+    showLogin('Login failed. Check your email and password, then try again.');
   } finally {
-    loginButton.disabled = false;
-    loginButton.textContent = 'Login';
+    $('loginButton').disabled = false;
+    $('loginButton').textContent = 'Login';
+    $('loginPassword').value = '';
   }
 });
 
-(async () => {
+$('logoutButton').addEventListener('click', async () => {
+  $('logoutButton').disabled = true;
+  const { error } = await supabaseClient.auth.signOut();
+  $('logoutButton').disabled = false;
+  if (error) {
+    alert('Could not log out: ' + error.message);
+    return;
+  }
+  showLogin('You have been logged out.');
+});
+
+(async function initializeAuth() {
   const { data, error } = await supabaseClient.auth.getSession();
-  if (!error && data.session) {
-    await verifyAdmin(data.session);
+  if (error) {
+    showLogin('Could not check your login session. Please sign in again.');
+    return;
+  }
+  if (data.session) {
+    await loadProfile(data.session);
+  } else {
+    showLogin();
   }
 })();
 
-</script></body></html>
+// If the session expires or changes in another tab, update the visible page.
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_OUT') {
+    showLogin('You have been logged out.');
+  }
+});
+</script>
+</body>
+</html>
